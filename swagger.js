@@ -1,3 +1,7 @@
+// swagger.js
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -29,5 +33,15 @@ const options = {
       },
     ],
   },
-  apis: ['./routes/*.js'], // Tous les fichiers de routes
+  apis: ['./routes/*.js'],
 };
+
+const swaggerSpec = swaggerJsDoc(options);
+
+// ✅ Fonction à exporter
+function setupSwagger(app) {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
+
+// ✅ Export correct
+module.exports = setupSwagger;
