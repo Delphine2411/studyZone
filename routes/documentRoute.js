@@ -29,10 +29,19 @@ module.exports = router;
 
 /**
  * @swagger
+ * tags:
+ *   name: Documents
+ *   description: Gestion des documents
+ */
+
+/**
+ * @swagger
  * /api/documents:
  *   post:
  *     summary: Ajouter un nouveau document
  *     tags: [Documents]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -53,5 +62,62 @@ module.exports = router;
  *       201:
  *         description: Document ajouté avec succès
  */
-router.post('/', protect, documentController.createDocument);
 
+/**
+ * @swagger
+ * /api/documents:
+ *   get:
+ *     summary: Obtenir tous les documents
+ *     tags: [Documents]
+ *     responses:
+ *       200:
+ *         description: Liste des documents
+ */
+
+/**
+ * @swagger
+ * /api/documents/{id}:
+ *   put:
+ *     summary: Mettre à jour un document (enseignant seulement)
+ *     tags: [Documents]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               matiere:
+ *                 type: string
+ *               niveau:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Document mis à jour
+ */
+
+/**
+ * @swagger
+ * /documents/{id}:
+ *   delete:
+ *     summary: Supprimer un document (enseignant seulement)
+ *     tags: [Documents]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Document supprimé
+ */
