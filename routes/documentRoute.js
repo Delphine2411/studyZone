@@ -26,3 +26,32 @@ router.delete('/:id', protect, (req, res, next) => {
 }, documentController.deleteDocument);
 
 module.exports = router;
+
+/**
+ * @swagger
+ * /api/documents:
+ *   post:
+ *     summary: Ajouter un nouveau document
+ *     tags: [Documents]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               matiere:
+ *                 type: string
+ *               niveau:
+ *                 type: string
+ *               enseignant:
+ *                 type: string
+ *               fichierUrl:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: Document ajouté avec succès
+ */
+router.post('/', protect, documentController.createDocument);
+
