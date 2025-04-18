@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const upload = require('../middlewares/uploadMiddleware');
 const documentController = require('../controllers/documentController');
-const { protect, restrictTo } = require('../middlewares/authMiddleware');
+const { protect } = require('../middlewares/authMiddleware');
 
 // Tous les utilisateurs authentifiés peuvent ajouter
 router.post('/', protect, upload.single('fichierUrl'), documentController.createDocument);
@@ -36,7 +36,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/documents:
+ * /documents:
  *   post:
  *     summary: Ajouter un nouveau document
  *     tags: [Documents]
@@ -65,7 +65,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/documents:
+ * /documents:
  *   get:
  *     summary: Obtenir tous les documents
  *     tags: [Documents]
@@ -76,7 +76,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /api/documents/{id}:
+ * /documents/{id}:
  *   put:
  *     summary: Mettre à jour un document (enseignant seulement)
  *     tags: [Documents]
@@ -121,4 +121,3 @@ module.exports = router;
  *       200:
  *         description: Document supprimé
  */
-router.post('/', protect, documentController.createDocument);
