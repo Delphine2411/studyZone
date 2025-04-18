@@ -121,3 +121,4 @@ module.exports = router;
  *       200:
  *         description: Document supprimé
  */
+router.post('/', protect, documentController.createDocument);
