@@ -14,6 +14,10 @@ const options = {
       {
         url: 'http://localhost:5000/api',
       },
+
+      {
+        url: 'https://studyzone-4gbd.onrender.com',
+      },
     ],
   },
   apis: ['./routes/*.js'], // Tu peux pointer vers tous tes fichiers de routes

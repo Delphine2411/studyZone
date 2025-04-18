@@ -16,8 +16,6 @@ const authRoutes = require('./routes/authRoute');
 app.use('/api/auth', authRoutes);
 
 
-
-
 module.exports = app;
 //PDMGau9q3vYvjHHB
 
