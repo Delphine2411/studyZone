@@ -4,20 +4,21 @@ const User = require('../models/userModel');
 const protect = async (req, res, next) => {
   let token;
 
-  // Récupère le token dans l'en-tête Authorization : "Bearer token"
+  // Vérifi si le token est en authorisation
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
+      // Extract the token from the Authorization header
       token = req.headers.authorization.split(' ')[1];
 
-      // Vérifie et décode le token
+      // Verify and decode the token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Récupère les infos utilisateur (sans le mot de passe)
+      // Attach the user information to the request object (without password)
       req.user = await User.findById(decoded.id).select('-password');
-
-      next(); // continue vers le contrôleur
+      
+      next();  // Continue to the controller
     } catch (error) {
-      return res.status(401).json({ message: 'Token invalide' });
+      return res.status(401).json({ message: 'Token invalide ou expiré' });
     }
   }
 
@@ -26,10 +27,10 @@ const protect = async (req, res, next) => {
   }
 };
 
-// Middleware pour vérifier si l'utilisateur est un enseignant
+// Middleware to check if the user is an 'enseignant'
 const isEnseignant = (req, res, next) => {
   if (req.user && req.user.role === 'enseignant') {
-    next();
+    next(); // Allow access to the next middleware/controller
   } else {
     return res.status(403).json({ message: 'Accès réservé aux enseignants' });
   }

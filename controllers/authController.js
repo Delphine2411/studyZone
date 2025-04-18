@@ -6,6 +6,11 @@ exports.register = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
+    // Validate role
+    if (!['eleve', 'etudiant', 'enseignant'].includes(role)) {
+      return res.status(400).json({ message: 'Invalid role provided' });
+    }
+
     // Vérifie si l'utilisateur existe déjà
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -48,33 +53,36 @@ exports.register = async (req, res) => {
   }
 };
 
-//Connection
+// Login function remains the same...
+
+// Login function
 exports.login = async (req, res) => {
   const { identifiant, password } = req.body;
 
   try {
-    // Recherche par email ou nom
+    // Find user by email or name
     const user = await User.findOne({
-      $or: [{ email: identifiant }, { name: identifiant }]
+      $or: [{ email: identifiant }, { name: identifiant }],
     });
 
     if (!user) {
       return res.status(400).json({ message: "Identifiant ou mot de passe invalide." });
     }
 
-    // Vérifie le mot de passe
+    // Compare password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Identifiant ou mot de passe invalide." });
     }
 
-    // Génère un token JWT
+    // Generate a JWT token upon successful login
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: '1d' }
+      { expiresIn: '1d' }  // Token expires in 1 day
     );
 
+    // Send user data and token in the response
     res.status(200).json({
       message: 'Connexion réussie',
       user: {
@@ -83,10 +91,9 @@ exports.login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
-      token,
+      token,  // Return the token in the response
     });
   } catch (error) {
     res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 };
-
